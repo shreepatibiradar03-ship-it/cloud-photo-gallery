@@ -1,14 +1,24 @@
 import React, { useState } from "react";
-import { signIn, signUp } from "./auth";
+import { signIn, signUp, confirmSignUp } from "./auth";
 
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [code, setCode] = useState("");
 
   const handleSignUp = async () => {
     try {
       await signUp(email, password);
-      alert("Sign up successful!");
+      alert("Sign up successful! Check Gmail for OTP");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleConfirm = async () => {
+    try {
+      await confirmSignUp(email, code);
+      alert("Account confirmed successfully!");
     } catch (err) {
       alert(err.message);
     }
@@ -41,7 +51,18 @@ function App() {
       />
       <br /><br />
 
+      <input
+        type="text"
+        placeholder="Verification Code"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+      />
+      <br /><br />
+
       <button onClick={handleSignUp}>Sign Up</button>
+
+      <button onClick={handleConfirm}>Confirm Signup</button>
+
       <button onClick={handleLogin}>Login</button>
     </div>
   );
